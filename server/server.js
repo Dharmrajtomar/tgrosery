@@ -18,17 +18,14 @@ const port = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
-//Allow multiple origins
-// const allowedOrigins = ['http://localhost:5173'];
+// ✅ CORS configuration must be on top
 const allowedOrigins = [
-  'http://localhost:5173',                //  local dev
-  'https://groseryweb.vercel.app'        //  deployed frontend
+  'http://localhost:5173',
+  'https://groseryweb.vercel.app'
 ];
 
-// ------------------------add CORS Middleware   start ---------------------------
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -38,20 +35,14 @@ app.use(cors({
   credentials: true
 }));
 
-// ------------------------add CORS Middleware   close ---------------------------
+// ✅ Use this only for Stripe route — must come before express.json()
+app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
-
-
-
-
-app.post ('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
- 
-
-//Middleware congiguration
+// ✅ Apply parsers after stripe
 app.use(express.json());
 app.use(cookieParser());
-//   app.use(cors({ origin: allowedOrigins, credentials: true }));
 
+// ✅ Routes
 app.get('/', (req, res) => res.send("API is Working"));
 app.use('/api/user', userRouter);
 app.use('/api/seller', sellerRouter);
@@ -60,6 +51,7 @@ app.use('/api/cart', cartRouter);
 app.use('/api/address', addressRouter);
 app.use('/api/order', orderRouter);
 
+// ✅ Start server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`)
+  console.log(`Server is running on http://localhost:${port}`);
 });
