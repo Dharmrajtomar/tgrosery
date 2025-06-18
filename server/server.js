@@ -24,11 +24,11 @@ await connectCloudinary();
 //   origin: ['http://localhost:5173', 'https://groseryweb.vercel.app'],
 //   credentials: true
 // }));
-
 // ---------------------change code start ------------------------------
 
+// const allowedOrigins = ['http://localhost:5173', 'https://groseryweb.vercel.app'];
 
-const allowedOrigins = ['http://localhost:5173', 'https://groseryweb.vercel.app'];
+const allowedOrigins = ['https://groseryweb.vercel.app'];
 
 app.use(cors({
   origin: function(origin, callback){
@@ -41,32 +41,16 @@ app.use(cors({
   },
   credentials: true
 }));
-
-
-
-
-
-
 // --------------------- change code close----------------------------------
 
-
-
-
-
-
-
-
-
-
-
-// ✅ Stripe webhook must come BEFORE body parsing
+//  Stripe webhook must come BEFORE body parsing
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
-// ✅ Body & Cookie Parsers
+//  Body & Cookie Parsers
 app.use(express.json());
 app.use(cookieParser());
 
-// ✅ All Routes
+//  All Routes
 app.get('/', (req, res) => res.send("API is Working"));
 app.use('/api/user', userRouter);
 app.use('/api/seller', sellerRouter);
