@@ -25,8 +25,23 @@ const allowedOrigins = [
   'https://groseryweb.vercel.app'        //  deployed frontend
 ];
 
+// ------------------------add CORS Middleware   start ---------------------------
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 
-app.use(express.json());
+// ------------------------add CORS Middleware   close ---------------------------
+
+
+
 
 
 app.post ('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
@@ -35,7 +50,7 @@ app.post ('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
 //Middleware congiguration
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+//   app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 app.get('/', (req, res) => res.send("API is Working"));
 app.use('/api/user', userRouter);
