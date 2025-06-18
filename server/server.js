@@ -1,6 +1,7 @@
 import cookieParser from "cookie-parser";
 import express from "express";
-import cors from "cors";
+import cors from 'cors';
+
 import connectDB from "./configs/db.js";
 import "dotenv/config";
 import userRouter from "./routes/userRoute.js";
@@ -11,7 +12,7 @@ import cartRouter from "./routes/cartRoute.js";
 import addressRouter from "./routes/addressRoute.js";
 import orderRouter from "./routes/orderRote.js";
 import { stripeWebhooks } from "./controllers/orderController.js";
-
+// const express = require('express');
 const app = express();
 const port = process.env.PORT || 4000;
 
@@ -19,7 +20,6 @@ const port = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
-// ✅ CORS Configuration - MUST be at the top
 app.use(cors({
   origin: ['http://localhost:5173', 'https://groseryweb.vercel.app'],
   credentials: true
