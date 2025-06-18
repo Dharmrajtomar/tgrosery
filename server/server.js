@@ -19,7 +19,15 @@ await connectDB();
 await connectCloudinary();
 
 //Allow multiple origins
-const allowedOrigins = ['http://localhost:5173'];
+// const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = [
+  'http://localhost:5173',                //  local dev
+  'https://groseryweb.vercel.app'        //  deployed frontend
+];
+
+
+app.use(express.json());
+
 
 app.post ('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
  
