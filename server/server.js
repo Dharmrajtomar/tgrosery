@@ -15,34 +15,24 @@ import { stripeWebhooks } from "./controllers/orderController.js";
 const app = express();
 const port = process.env.PORT || 4000;
 
+// ✅ Connect DB and Cloudinary
 await connectDB();
 await connectCloudinary();
 
-// ✅ CORS middleware comes FIRST
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://groseryweb.vercel.app'
-];
-
+// ✅ CORS Configuration - MUST be at the top
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: ['http://localhost:5173', 'https://groseryweb.vercel.app'],
   credentials: true
 }));
 
-// ✅ Stripe raw body (must come before express.json)
+// ✅ Stripe webhook must come BEFORE body parsing
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
-// ✅ JSON/body parsers
+// ✅ Body & Cookie Parsers
 app.use(express.json());
 app.use(cookieParser());
 
-// ✅ Routes
+// ✅ All Routes
 app.get('/', (req, res) => res.send("API is Working"));
 app.use('/api/user', userRouter);
 app.use('/api/seller', sellerRouter);
@@ -51,7 +41,7 @@ app.use('/api/cart', cartRouter);
 app.use('/api/address', addressRouter);
 app.use('/api/order', orderRouter);
 
-// ✅ Start server
+// ✅ Start Server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
