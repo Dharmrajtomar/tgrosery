@@ -18,7 +18,7 @@ const port = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
-// ✅ CORS configuration must be on top
+// ✅ CORS middleware comes FIRST
 const allowedOrigins = [
   'http://localhost:5173',
   'https://groseryweb.vercel.app'
@@ -29,16 +29,16 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true
 }));
 
-// ✅ Use this only for Stripe route — must come before express.json()
+// ✅ Stripe raw body (must come before express.json)
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
-// ✅ Apply parsers after stripe
+// ✅ JSON/body parsers
 app.use(express.json());
 app.use(cookieParser());
 
