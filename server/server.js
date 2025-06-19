@@ -28,7 +28,7 @@ await connectCloudinary();
 
 // const allowedOrigins = ['http://localhost:5173', 'https://groseryweb.vercel.app'];
 
-const allowedOrigins = ['https://groseryweb.vercel.app'];
+const allowedOrigins = ['http://localhost:5173','https://groseryweb.vercel.app'];
 
 app.use(cors({
   origin: allowedOrigins,
