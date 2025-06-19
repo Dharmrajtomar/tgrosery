@@ -32,7 +32,8 @@ const allowedOrigins = ['http://localhost:5173','https://groseryweb.vercel.app']
 
 app.use(cors({
   origin: allowedOrigins,
-  credentials: true
+  credentials: true,
+   optionsSuccessStatus: 200
 }));
 
 // --------------------- change code close----------------------------------
